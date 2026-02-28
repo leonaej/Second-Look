@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- This is the structure of the popup panel that appears when the user clicks the extension icon -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Second Look – Zoom Out</title>
+
+  <!-- This links our CSS file so the popup looks good -->
+  <link rel="stylesheet" href="popup.css" />
+
+  <!-- Chart.js is a free library that draws our pie chart -->
+  <!-- We load it from a CDN (a public server) so we don't have to download it -->
+  <script src="chart.min.js"></script>
+</head>
+
+<body>
+
+  <!-- ===== SCREEN 1: Shown when user is on a tracked company's site ===== -->
+  <div id="zoom-out-view">
+
+    <!-- Top header -->
+    <div class="header">
+      <span class="logo">🔍 Second Look</span>
+      <span class="tag">Zoom Out</span>
+    </div>
+
+    <!-- The big warning message e.g. "Apple controls 57% of the US smartphone market" -->
+    <div class="warning-box">
+      <p id="company-message">Loading...</p>
+    </div>
+
+    <!-- The pie chart lives inside this canvas element -->
+    <!-- Chart.js will draw directly onto this -->
+    <div class="chart-container">
+      <canvas id="marketChart"></canvas>
+    </div>
+
+    <!-- Label under the chart -->
+    <p id="chart-label" class="chart-label"></p>
+
+    <!-- ---- Alternative Products Section ---- -->
+    <div class="section">
+      <h3 class="section-title">🛍️ Buy These Instead</h3>
+      <!-- popup.js will inject product cards in here -->
+      <div id="alt-products"></div>
+    </div>
+
+    <!-- ---- Alternative Websites Section ---- -->
+    <div class="section">
+      <h3 class="section-title">🌐 Buy From Here Instead</h3>
+      <!-- popup.js will inject website links in here -->
+      <div id="alt-websites"></div>
+    </div>
+
+  </div>
+
+  <!-- ===== SCREEN 2: Shown when user is NOT on a tracked site ===== -->
+  <!-- This is hidden by default, popup.js will show it if needed -->
+  <div id="no-match-view" class="hidden">
+    <div class="header">
+      <span class="logo">🔍 Second Look</span>
+    </div>
+    <div class="no-match-box">
+      <p>👀 We're watching out for you.</p>
+      <p>Visit a site like <strong>Amazon, Apple, Google, Netflix, Meta, or OpenAI</strong> and we'll show you what's really going on.</p>
+    </div>
+  </div>
+
+  <!-- This loads our popup logic last, after the HTML is ready -->
+  <script src="popup.js"></script>
+
+</body>
+</html>
