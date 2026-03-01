@@ -1,6 +1,6 @@
 const NESSIE_API_KEY = "ce4f96b83e029b00b328ab78043f8bcb";
 const DEMO_ACCOUNT_ID = "69a3626c95150878eaffaea5"; // Created via Nessie API
-const GEMINI_API_KEY = "AIzaSyD2xkn_cW_8aeAlLG5rQ_U9RVSMy3K9sbc";
+const GEMINI_API_KEY = "AIzaSyDxj_kfj4BEGROcZtNxlUTouIR_qzDmQPE";
 
 // Listener for messages from the content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -131,15 +131,28 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
 }
 `;
 
-        console.log("⚡ Sending Semantic + Ethical Prompt to Gemini (gemini-3-flash-preview)...");
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }]
-            })
-        });
+        console.log("⚡ Sending Semantic + Ethical Prompt to Gemini (gemini-1.5-flash)...");
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        
+        let response;
+        let attempts = 0;
+        const maxAttempts = 3;
+
+        while (attempts < maxAttempts) {
+            response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
+
+            if (response.status !== 503) break;
+            
+            attempts++;
+            console.warn(`⚠️ Gemini 503 (High Demand). Retrying attempt ${attempts}...`);
+            await new Promise(r => setTimeout(r, 1000 * attempts)); // Exponential backoff
+        }
 
         const data = await response.json();
 
