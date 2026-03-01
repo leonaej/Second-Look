@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Second Look – Zoom Out</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+
+  <!-- SCREEN 1: Main view with market data -->
+  <div id="zoom-out-view" class="hidden">
+
+    <div class="header">
+      <span class="logo"> Second Look</span>
+    </div>
+
+    <div class="warning-box">
+      <p id="company-message">Loading...</p>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="marketChart"></canvas>
+    </div>
+
+    <p id="chart-label" class="chart-label"></p>
+
+    <!-- WHY button -->
+    <div class="why-section">
+      <a href="https://second-look.info/why" target="_blank" class="why-button">
+        ⚠️ WHY should you care?
+      </a>
+    </div>
+
+    <!-- Alternative Websites — title is set dynamically by popup.js -->
+    <div class="section">
+      <h3 class="section-title" id="alt-websites-title">Explore Alternatives</h3>
+      <div id="alt-websites"></div>
+    </div>
+
+  </div>
+
+  <!-- SCREEN 2: Loading spinner -->
+  <div id="loading-view" class="hidden">
+    <div class="header">
+      <span class="logo">🔍 Second Look</span>
+    </div>
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <p>Analyzing market data...</p>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: No data found -->
+  <div id="no-match-view" class="hidden">
+    <div class="header">
+      <span class="logo">🔍 Second Look</span>
+    </div>
+    <div class="no-match-box">
+      <p>👀 We're watching out for you.</p>
+      <p>Visit a site like <strong>Amazon, Apple, Google, Netflix, Meta, or Spotify</strong> and we'll show you what's really going on.</p>
+    </div>
+  </div>
+
+  <script src="chart.min.js"></script>
+  <script src="popup.js"></script>
+
+</body>
+</html>

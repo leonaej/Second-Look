@@ -1,0 +1,241 @@
+/* popup.css */
+/* This file controls how everything looks in the popup */
+
+/* ===== GLOBAL RESET & BASE ===== */
+/* Remove default browser spacing and set a clean base font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 380px;              /* Fixed width of the popup */
+  min-height: 200px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: #0f0f0f; /* Dark background */
+  color: #f0f0f0;            /* Light text */
+  padding: 16px;
+}
+
+/* ===== UTILITY ===== */
+/* Anything with class "hidden" disappears completely */
+.hidden {
+  display: none;
+}
+
+/* ===== HEADER ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.logo {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+/* The small "Zoom Out" badge in the top right */
+.tag {
+  font-size: 11px;
+  background-color: #2f80ed;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ===== WARNING BOX ===== */
+/* The bold stat message at the top e.g. "Apple controls 57%..." */
+.warning-box {
+  background-color: #1e1e1e;
+  border-left: 4px solid #e74c3c; /* Red left border for urgency */
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+.warning-box p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #f0f0f0;
+  font-weight: 500;
+}
+
+/* ===== PIE CHART ===== */
+.chart-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+/* The canvas element Chart.js draws on */
+#marketChart {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+/* Label text under the pie chart */
+.chart-label {
+  text-align: center;
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 18px;
+}
+
+/* ===== SECTIONS (Products & Websites) ===== */
+.section {
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #aaaaaa;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #2a2a2a;
+  padding-bottom: 6px;
+}
+
+/* ===== PRODUCT CARDS ===== */
+/* Each alternative product shows as a card */
+.product-card {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.product-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.product-reason {
+  font-size: 11px;
+  color: #888888;
+  line-height: 1.4;
+}
+
+/* ===== WEBSITE LINKS ===== */
+/* Each alternative website shows as a clickable link card */
+.website-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  text-decoration: none;       /* Remove underline from link */
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+/* When user hovers over a website card it lights up */
+.website-card:hover {
+  border-color: #2f80ed;
+  background-color: #1e2a3a;
+}
+
+.website-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.website-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.website-reason {
+  font-size: 11px;
+  color: #888888;
+}
+
+/* The little arrow on the right of each website card */
+.website-arrow {
+  font-size: 16px;
+  color: #2f80ed;
+}
+
+/* ===== LOADING SCREEN ===== */
+.loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 16px;
+  color: #888888;
+  font-size: 13px;
+}
+
+/* The spinning circle animation */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #2a2a2a;
+  border-top-color: #2f80ed;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== NO MATCH SCREEN ===== */
+/* Shown when user is on a site we don't track */
+.no-match-box {
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  line-height: 1.8;
+  font-size: 13px;
+  color: #aaaaaa;
+}
+
+.no-match-box strong {
+  color: #ffffff;
+}
+
+.why-section {
+  padding: 0 16px 12px;
+}
+
+.why-button {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  background-color: transparent;
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  color: #e74c3c;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  box-sizing: border-box;
+}
+
+.why-button:hover {
+  background-color: #e74c3c;
+  color: #ffffff;
+}
