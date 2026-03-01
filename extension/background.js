@@ -1,7 +1,7 @@
 const NESSIE_API_KEY = "ce4f96b83e029b00b328ab78043f8bcb";
 const DEMO_ACCOUNT_ID = "69a3626c95150878eaffaea5"; // Created via Nessie API
 const GEMINI_API_KEY = "AIzaSyBXr5B60PuXCqjxks2O1_O6DXhYNZZjdK0";
-const CACHE_VERSION = "v2"; // Bump this to invalidate all old caches
+const CACHE_VERSION = "v3"; // Bump this to invalidate all old caches
 
 // Listener for messages from the content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -124,10 +124,9 @@ Analyze the website domain: ${semanticHtml.substring(0, 100)} (and the cart cont
 - Identify the parent company and their industry.
 - Find their consumer market share (e.g. "Amazon controls 37% of US e-commerce").
 - Recommend 2-3 smaller or independent alternatives for the items in the cart.
-- **Rule 1: Strict Category Matching.** Only suggest stores that ACTUALLY SELL the item's category. For clothing, suggest fashion retailers like Etsy, ThredUp, Poshmark, or Reformation. Do NOT suggest home decor, gift shops, or unrelated stores (e.g., do NOT suggest The Little Market or Uncommon Goods for clothing/accessories).
-- **Rule 2: Query Simplification.** Use one or two word search terms (e.g., 'earmuffs' or 'dress') in the URL. Never use full product titles.
-- **Rule 3: Quality Guard.** If you cannot find a highly relevant, specialized alternative, return an empty 'alternatives' array rather than a bad guess.
-- IMPORTANT: Provide **Robust Search-Based Links**. Generate a Search Result URL (e.g., 'https://www.etsy.com/search?q=dress' or 'https://www.thredup.com/search?q=earmuffs').
+- **Rule 1: Strict Category Matching.** Only suggest stores that ACTUALLY SELL the item's category. For clothing, suggest fashion retailers (Etsy, ThredUp, Poshmark, Reformation). Do NOT suggest home/gift shops for clothing.
+- **Rule 2: Quality Guard.** If you cannot find a relevant alternative, return an empty 'alternatives' array.
+- Do NOT generate URLs. Just provide the brand name, target_product, and reason. The extension will construct the URL.
 
 SEMANTIC CART HTML:
 ${semanticHtml}
@@ -152,7 +151,7 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
       "rest": 63
     },
     "alternatives": [
-      { "name": "Indie Brand", "target_product": "Original Item Name", "url": "https://example.com", "reason": "Reason why it is better/ethical" }
+      { "name": "Indie Brand", "target_product": "Original Item Name", "reason": "Reason why it is better/ethical" }
     ]
   }
 }
@@ -207,6 +206,15 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
         try {
             const result = JSON.parse(text);
             console.log("✅ Consolidated AI Insights received.");
+
+            // --- URL CONSTRUCTION: Build reliable Google Shopping links --- //
+            if (result.ethical_insights?.alternatives) {
+                result.ethical_insights.alternatives = result.ethical_insights.alternatives.map(alt => {
+                    const searchQuery = encodeURIComponent((alt.target_product || 'products') + ' ' + alt.name);
+                    alt.url = 'https://www.google.com/search?tbm=shop&q=' + searchQuery;
+                    return alt;
+                });
+            }
 
             // --- 2. OPTIMIZED ETHICAL CACHE SAVE --- //
             if (result.ethical_insights?.hasMarketData) {
