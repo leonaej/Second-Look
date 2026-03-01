@@ -131,8 +131,8 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
 }
 `;
 
-        console.log("⚡ Sending Semantic + Ethical Prompt to Gemini (gemini-1.5-flash)...");
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+        console.log("⚡ Sending Semantic + Ethical Prompt to Gemini (gemini-2.5-flash-lite)...");
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
         
         let response;
         let attempts = 0;
