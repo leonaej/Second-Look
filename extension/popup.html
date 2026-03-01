@@ -12,194 +12,226 @@
             width: 380px;
             margin: 0;
             padding: 0;
-            background: #f0f2f5;
+            background: #0f172a;
             font-family: 'Outfit', sans-serif;
-            color: #1a1a1a;
+            color: white;
             overflow-x: hidden;
         }
 
         .container {
-            padding: 15px;
-            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            padding: 20px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 480px;
         }
 
         .header {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
+            justify-content: space-between;
+            margin-bottom: 25px;
         }
 
-        .header h1 {
+        .logo {
             font-size: 18px;
-            margin: 0;
-            background: linear-gradient(90deg, #6366f1, #a855f7);
+            font-weight: 800;
+            background: linear-gradient(90deg, #818cf8, #c084fc);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
             letter-spacing: -0.5px;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            margin-bottom: 15px;
-        }
-
-        .ethical-card {
-            background: #1e293b;
-            color: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            display: none;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .ethical-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 12px;
+        .guardian-badge {
+            background: rgba(129, 140, 248, 0.1);
+            color: #818cf8;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #94a3b8;
+            border: 1px solid rgba(129, 140, 248, 0.2);
+        }
+
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #company-message {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #fca5a5;
+            font-weight: 500;
         }
 
         .chart-container {
-            height: 140px;
-            margin: 15px 0;
-            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 25px;
+            height: 180px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .alt-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
+        .why-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .why-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .why-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .alt-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 15px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #6366f1;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .alt-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 10px;
-            text-decoration: none;
-            color: white;
-            transition: background 0.2s;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 8px;
+            transition: transform 0.2s;
         }
 
         .alt-item:hover {
-            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .alt-name {
             font-weight: 700;
-            font-size: 13px;
-            color: #818cf8;
+            font-size: 14px;
+            color: white;
         }
 
         .alt-reason {
             font-size: 11px;
             color: #94a3b8;
-            margin-top: 2px;
+            margin-top: 4px;
+            line-height: 1.4;
         }
 
-        .section-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #64748b;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .history-list {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .history-item {
-            padding: 12px;
-            border-radius: 14px;
-            background: white;
-            margin-bottom: 8px;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .history-item .desc {
-            font-size: 14px;
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .history-item .meta {
-            font-size: 12px;
-            color: #64748b;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .amount {
-            color: #ef4444;
-            font-weight: 700;
-        }
-
-        .loading-spinner {
+        .loading-view, .no-match-view {
             text-align: center;
-            padding: 20px;
-            color: #94a3b8;
-            font-size: 14px;
+            padding: 60px 20px;
         }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(129, 140, 248, 0.1);
+            border-top: 3px solid #818cf8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden { display: none; }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="header">
-            <h1>SECOND LOOK</h1>
-        </div>
-
-        <!-- 🏦 Finance Guardian -->
-        <div class="card">
-            <div class="section-title">
-                🏦 Available Funds
+        <!-- Main Ethical View -->
+        <div id="zoom-out-view" class="hidden">
+            <div class="header">
+                <span class="logo">Second Look</span>
+                <span class="guardian-badge">Ethical Guardian</span>
             </div>
-            <div style="text-align: center;">
-                <div id="calculated-budget" style="font-size: 40px; font-weight: 800; color: #6366f1; letter-spacing: -1px;">$---.--</div>
-                <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Capital One Live Sync</div>
-            </div>
-        </div>
 
-        <!-- 🌍 Ethical Guardian -->
-        <div id="sl-ethical-container" class="ethical-card">
-            <h3>🌍 Corporate Radar</h3>
-            <div id="ethical-message" style="font-size: 13px; line-height: 1.5; color: #e2e8f0;">Analyzing market context...</div>
-            
+            <div class="warning-box">
+                <p id="company-message">Scanning domain context...</p>
+            </div>
+
             <div class="chart-container">
                 <canvas id="popup-ethical-chart"></canvas>
             </div>
 
-            <div style="font-size: 11px; text-transform: uppercase; color: #818cf8; font-weight: 700; margin-top: 15px;">Shop Small / Indie:</div>
-            <div id="alt-list" class="alt-list">
-                <!-- Alternatives injected here -->
+            <div class="why-section">
+                <a href="https://second-look.info/why" target="_blank" class="why-button">
+                    <span>⚠️</span> WHY should you care?
+                </a>
+            </div>
+
+            <div class="alt-section">
+                <div class="section-title">Support Independent Alternatives</div>
+                <div id="alt-list">
+                    <!-- Alternatives injected here -->
+                </div>
             </div>
         </div>
 
-        <div class="section-title">
-            🕒 Recent Activity
+        <!-- Loading View -->
+        <div id="loading-view">
+            <div class="header">
+                <span class="logo">Second Look</span>
+            </div>
+            <div class="loading-view">
+                <div class="spinner"></div>
+                <p style="color: #94a3b8; font-size: 14px;">Analyzing market dominance...</p>
+            </div>
         </div>
 
-        <ul id="history-list" class="history-list">
-            <div id="loading" class="loading-spinner">Waking up Nessie...</div>
-        </ul>
+        <!-- No Match View -->
+        <div id="no-match-view" class="hidden">
+            <div class="header">
+                <span class="logo">Second Look</span>
+            </div>
+            <div class="no-match-view">
+                <div style="font-size: 32px; margin-bottom: 20px;">🕵️‍♂️</div>
+                <p style="font-weight: 700; font-size: 16px; margin-bottom: 10px;">Market Analysis Idle</p>
+                <p style="color: #94a3b8; font-size: 13px; line-height: 1.6;">Visit a site like Amazon, Google, or Netflix to see what's really going on behind the scenes.</p>
+            </div>
+        </div>
     </div>
     <script src="popup.js"></script>
 </body>
