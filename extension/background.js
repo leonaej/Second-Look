@@ -125,7 +125,7 @@ Analyze the website domain: ${semanticHtml.substring(0, 100)} (and the cart cont
 - Recommend 2-3 smaller or independent alternatives for the items in the cart.
 - **Rule 1: Strict Category Matching.** Only suggest stores that explicitly specialize in the item's primary category (e.g., only fashion brands for clothing). Do not suggest general gift/home shops for specialized goods.
 - **Rule 2: Query Simplification.** Use very simple search terms (e.g., 'earmuffs' or 'dress') in the URL to ensure the results page is not empty.
-- **Rule 3: Quality Guard.** If you cannot find a highly relevant, specialized alternative, return an empty `alternatives` array.
+- **Rule 3: Quality Guard.** If you cannot find a highly relevant, specialized alternative, return an empty 'alternatives' array.
 - IMPORTANT: Provide **Robust Search-Based Links**. Generate a Search Result URL for the specific product on the indie site (e.g., 'https://thelittlemarket.com/search?q=ear+muffs' or 'https://www.etsy.com/search?q=chiffon+dress').
 
 SEMANTIC CART HTML:
