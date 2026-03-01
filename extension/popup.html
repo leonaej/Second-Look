@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Second Look Dashboard</title>
+    <script src="chart.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
 
         body {
-            width: 350px;
+            width: 380px;
             margin: 0;
             padding: 0;
             background: #f0f2f5;
@@ -18,118 +19,105 @@
         }
 
         .container {
-            padding: 20px;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
         }
 
         .header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .header h1 {
-            font-size: 20px;
+            font-size: 18px;
             margin: 0;
             background: linear-gradient(90deg, #6366f1, #a855f7);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: -0.5px;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            margin-bottom: 15px;
         }
 
-        .card:hover {
-            transform: translateY(-2px);
+        .ethical-card {
+            background: #1e293b;
+            color: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: none;
+            overflow: hidden;
+            position: relative;
         }
 
-        .balance-label {
-            font-size: 13px;
-            color: #64748b;
+        .ethical-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-weight: 600;
-            margin-bottom: 5px;
+            color: #94a3b8;
         }
 
-        .balance-amount {
-            font-size: 32px;
-            font-weight: 700;
-            color: #0f172a;
+        .chart-container {
+            height: 140px;
+            margin: 15px 0;
+            position: relative;
         }
 
-        .budget-section {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .budget-input-group {
+        .alt-list {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 10px;
-            margin-top: 8px;
+            margin-top: 15px;
         }
 
-        input[type="number"] {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            font-family: inherit;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input[type="number"]:focus {
-            border-color: #6366f1;
-        }
-
-        .btn-save {
-            background: #6366f1;
+        .alt-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px;
+            text-decoration: none;
             color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
+            transition: background 0.2s;
         }
 
-        .btn-save:hover {
-            background: #4f46e5;
+        .alt-item:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        .btn-save:active {
-            transform: scale(0.95);
+        .alt-name {
+            font-weight: 700;
+            font-size: 13px;
+            color: #818cf8;
+        }
+
+        .alt-reason {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 2px;
         }
 
         .section-title {
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             color: #64748b;
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .history-list {
-            max-height: 200px;
-            overflow-y: auto;
             margin: 0;
             padding: 0;
             list-style: none;
@@ -137,44 +125,31 @@
 
         .history-item {
             padding: 12px;
-            border-radius: 12px;
+            border-radius: 14px;
             background: white;
             margin-bottom: 8px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid #e2e8f0;
             display: flex;
             flex-direction: column;
             gap: 4px;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
         }
 
         .history-item .desc {
             font-size: 14px;
             font-weight: 600;
-            color: #1e293b;
+            color: #0f172a;
         }
 
         .history-item .meta {
             font-size: 12px;
-            color: #94a3b8;
+            color: #64748b;
             display: flex;
             justify-content: space-between;
         }
 
-        .history-item .amount {
+        .amount {
             color: #ef4444;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .loading-spinner {
@@ -182,15 +157,6 @@
             padding: 20px;
             color: #94a3b8;
             font-size: 14px;
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #e2e8f0;
-            border-radius: 10px;
         }
     </style>
 </head>
@@ -201,24 +167,38 @@
             <h1>SECOND LOOK</h1>
         </div>
 
+        <!-- 🏦 Finance Guardian -->
         <div class="card">
-            <div class="section-title" style="margin-bottom: 12px; font-size: 16px;">
-                <span>🏦 Available Bank Balance</span>
+            <div class="section-title">
+                🏦 Available Funds
+            </div>
+            <div style="text-align: center;">
+                <div id="calculated-budget" style="font-size: 40px; font-weight: 800; color: #6366f1; letter-spacing: -1px;">$---.--</div>
+                <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Capital One Live Sync</div>
+            </div>
+        </div>
+
+        <!-- 🌍 Ethical Guardian -->
+        <div id="sl-ethical-container" class="ethical-card">
+            <h3>🌍 Corporate Radar</h3>
+            <div id="ethical-message" style="font-size: 13px; line-height: 1.5; color: #e2e8f0;">Analyzing market context...</div>
+            
+            <div class="chart-container">
+                <canvas id="popup-ethical-chart"></canvas>
             </div>
 
-            <div style="text-align: center; padding: 10px 0 20px 0;">
-                <div id="calculated-budget" style="font-size: 42px; font-weight: 700; color: #6366f1;">$---.--</div>
-                <div class="balance-label" style="font-size: 11px; margin-top: 5px;">Linked to Capital One Nessie API</div>
+            <div style="font-size: 11px; text-transform: uppercase; color: #818cf8; font-weight: 700; margin-top: 15px;">Shop Small / Indie:</div>
+            <div id="alt-list" class="alt-list">
+                <!-- Alternatives injected here -->
             </div>
         </div>
 
         <div class="section-title">
-            <span>🕒 Recent Activity</span>
+            🕒 Recent Activity
         </div>
 
         <ul id="history-list" class="history-list">
-            <!-- Activity items will be injected here -->
-            <div id="loading" class="loading-spinner">Fetching Nessie bank data...</div>
+            <div id="loading" class="loading-spinner">Waking up Nessie...</div>
         </ul>
     </div>
     <script src="popup.js"></script>

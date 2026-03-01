@@ -1,6 +1,6 @@
 const NESSIE_API_KEY = "ce4f96b83e029b00b328ab78043f8bcb";
 const DEMO_ACCOUNT_ID = "69a3626c95150878eaffaea5"; // Created via Nessie API
-const GEMINI_API_KEY = "AIzaSyBq3xWp3o_dfKbBn4WNeNEWb222n_9J4bk";
+const GEMINI_API_KEY = "AIzaSyD2xkn_cW_8aeAlLG5rQ_U9RVSMy3K9sbc";
 
 // Listener for messages from the content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -33,9 +33,9 @@ async function fetchNessieData() {
         // 1. Check for cached data first (valid for 1 hour)
         const cache = await new Promise(resolve => chrome.storage.local.get(['nessieCache', 'nessieCacheTime'], resolve));
         const now = Date.now();
-        
+
         // Ensure cache is valid, recent, and HAS purchases (not just an empty stub)
-        if (cache.nessieCache && cache.nessieCache.purchases?.length > 0 && 
+        if (cache.nessieCache && cache.nessieCache.purchases?.length > 0 &&
             cache.nessieCacheTime && (now - cache.nessieCacheTime < 3600000)) {
             console.log("💾 Using cached Nessie data (Speed Boost!)");
             // Silently refresh for next time
@@ -69,9 +69,9 @@ async function silentRefreshNessie() {
     };
 
     // Save to cache
-    chrome.storage.local.set({ 
-        nessieCache: data, 
-        nessieCacheTime: Date.now() 
+    chrome.storage.local.set({
+        nessieCache: data,
+        nessieCacheTime: Date.now()
     });
 
     return data;
@@ -79,9 +79,9 @@ async function silentRefreshNessie() {
 
 // Unified Semantic AI Analysis (Extraction + Matching) - Optimized for Speed
 async function askGeminiDejaVu(semanticHtml, pastPurchases) {
-    if (!semanticHtml || !pastPurchases?.length) {
-        console.warn("⚠️ Semantic HTML or History is empty - Skipping Gemini.");
-        return { success: true, data: { dejaVu_matches: [], ethical_insights: { hasMarketData: false, message: "No cart or history to analyze." } } };
+    if (!semanticHtml) {
+        console.warn("⚠️ Semantic HTML is empty - Skipping Gemini.");
+        return { success: true, data: { dejaVu_matches: [], ethical_insights: { hasMarketData: false, message: "Nothing to analyze." } } };
     }
 
     try {
@@ -142,7 +142,7 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
         });
 
         const data = await response.json();
-        
+
         if (data.error) {
             console.error("❌ Gemini API Error:", data.error);
             return { success: false, error: data.error.message };
@@ -154,7 +154,7 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
         }
 
         let text = data.candidates[0].content.parts[0].text;
-        
+
         // --- JSON RESCUE SYSTEM --- //
         text = text.replace(/```json|```/g, "").trim();
 
