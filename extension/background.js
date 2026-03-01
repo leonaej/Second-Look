@@ -81,76 +81,101 @@ async function silentRefreshNessie() {
 async function askGeminiDejaVu(semanticHtml, pastPurchases) {
     if (!semanticHtml || !pastPurchases?.length) {
         console.warn("⚠️ Semantic HTML or History is empty - Skipping Gemini.");
-        return [];
+        return { success: true, data: { dejaVu_matches: [], ethical_insights: { hasMarketData: false, message: "No cart or history to analyze." } } };
     }
 
     try {
         const historyText = pastPurchases.slice(0, 25).map(p => `- ${p.description} (${p.purchase_date})`).join("\n");
 
-        const prompt = `You are 'Second Look'.
-Semantic HTML Cart:
-"""
+        const prompt = `
+You are a consumer advocate AI for the "Second Look" extension.
+The user is at a checkout page. You have two missions:
+
+MISSION 1: DEJA VU (Past Purchases)
+Compare the current cart (Semantic HTML below) against the user's past purchases.
+- Ignore items that are different categories.
+- Flag a match ONLY if the user owns a very similar or identical product.
+
+MISSION 2: ETHICAL GUARDIAN (Market Dominance)
+Analyze the website domain: ${semanticHtml.substring(0, 100)} (and the cart context).
+- Identify the parent company and their industry.
+- Find their consumer market share (e.g. "Amazon controls 37% of US e-commerce").
+- Recommend 2-3 smaller or independent alternatives for the items in the cart.
+
+SEMANTIC CART HTML:
 ${semanticHtml}
-"""
 
-Purchase History:
-${historyText}
+USER'S PAST PURCHASES:
+${JSON.stringify(pastPurchases)}
 
-Task:
-1. Identify ALL unique products in the HTML skeleton. 
-2. Match EVERY product against the history. A match occurs if:
-   - High semantic similarity (e.g., 'Winter Ear muffs' matches 'FUZZY EARMUFFS').
-   - Same specific category (e.g., another pair of Earmuffs, a second Steam Iron).
-3. Return a JSON array of ALL matches found: [{"cart_item": "clean name", "history_item": "matching history", "category": "CATEGORY", "purchase_date": "YYYY-MM-DD"}]
-Respond ONLY with the JSON array. If no matches, return [].`;
+RESPOND ONLY in this JSON format. No extra text, no backticks:
+{
+  "dejaVu_matches": [
+    { "cart_item": "item name", "history_item": "matched name", "category": "category", "purchase_date": "date" }
+  ],
+  "ethical_insights": {
+    "hasMarketData": true,
+    "companyName": "Parent Corp",
+    "message": "Company [Name] controls [X]% of the [Industry] market.",
+    "marketData": {
+      "label": "Market Share",
+      "dominatedLabel": "Company",
+      "dominated": 37,
+      "restLabel": "Everyone Else",
+      "rest": 63
+    },
+    "alternatives": [
+      { "name": "Indie Brand", "reason": "Reason why it is better/ethical" }
+    ]
+  }
+}
+`;
 
-        console.log("⚡ Sending Semantic HTML Prompt to Gemini (gemini-3-flash-preview)...");
+    try {
+        console.log("⚡ Sending Semantic + Ethical Prompt to Gemini (gemini-3-flash-preview)...");
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
-        
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { temperature: 0.1, maxOutputTokens: 1500 }
+                contents: [{ parts: [{ text: prompt }] }]
             })
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error("❌ Gemini API Fetch Failed:", response.status, errorText);
-            return [];
-        }
-
-        const result = await response.json();
-        console.log("✅ Gemini Response Received:", result);
-
-        if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
-            let text = result.candidates[0].content.parts[0].text.trim().replace(/```json|```/g, "");
-            console.log("🔍 Cleaned AI JSON:", text);
-            
-            try {
-                return JSON.parse(text);
-            } catch (syntaxErr) {
-                console.warn("⚠️ JSON Parse Error (Truncated?). Attempting rescue...", syntaxErr);
-                // Simple rescue: find the last valid object boundary
-                const lastBrace = text.lastIndexOf('}');
-                if (lastBrace !== -1) {
-                    try {
-                        const rescuedText = text.substring(0, lastBrace + 1) + ']';
-                        return JSON.parse(rescuedText);
-                    } catch (e) {
-                        console.error("❌ Rescue failed.");
-                    }
-                }
-            }
-        }
+        const data = await response.json();
         
-        console.warn("⚠️ No text parts found in Gemini response.");
-        return [];
+        if (data.error) {
+            console.error("❌ Gemini API Error:", data.error);
+            return { success: false, error: data.error.message };
+        }
+
+        if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
+            console.warn("⚠️ Empty content from Gemini.");
+            return { success: false, error: "Empty AI response" };
+        }
+
+        let text = data.candidates[0].content.parts[0].text;
+        
+        // --- JSON RESCUE SYSTEM --- //
+        text = text.replace(/```json|```/g, "").trim();
+
+        const firstBrace = text.indexOf('{');
+        const lastBrace = text.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace !== -1) {
+            text = text.substring(firstBrace, lastBrace + 1);
+        }
+
+        try {
+            const result = JSON.parse(text);
+            console.log("✅ Consolidated AI Insights received.");
+            return result;
+        } catch (parseErr) {
+            console.error("❌ Final JSON Parse failed:", parseErr, text);
+            return { success: false, error: "JSON Parse failure" };
+        }
     } catch (error) {
         console.error("❌ Gemini AI Processing Error:", error);
-        return [];
+        return { success: false, error: error.message };
     }
 }
 

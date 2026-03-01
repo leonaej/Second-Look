@@ -1,0 +1,244 @@
+{
+  "companies": [
+    {
+      "name": "Apple",
+      "domains": ["apple.com", "www.apple.com"],
+      "message": "Apple controls 57% of the US smartphone market.",
+      "category": "Smartphones & Devices",
+      "marketData": {
+        "label": "US Smartphone Market Share",
+        "dominated": 57,
+        "dominatedLabel": "Apple",
+        "rest": 43,
+        "restLabel": "Everyone Else"
+      },
+      "alternativeProducts": [
+        {
+          "name": "Samsung Galaxy S24",
+          "reason": "Comparable specs, more affordable, open Android ecosystem"
+        },
+        {
+          "name": "Google Pixel 8",
+          "reason": "Clean software, great camera, direct Android updates"
+        },
+        {
+          "name": "OnePlus 12",
+          "reason": "Flagship performance at a lower price point"
+        }
+      ],
+      "alternativeWebsites": [
+        {
+          "name": "Samsung.com",
+          "url": "https://www.samsung.com",
+          "reason": "Buy directly from the manufacturer"
+        },
+        {
+          "name": "Best Buy",
+          "url": "https://www.bestbuy.com",
+          "reason": "Wide selection, price match guarantee"
+        },
+        {
+          "name": "Swappa",
+          "url": "https://swappa.com",
+          "reason": "Buy refurbished phones at a fraction of the cost"
+        }
+      ]
+    },
+    {
+      "name": "Amazon",
+      "domains": ["amazon.com", "www.amazon.com"],
+      "message": "Amazon controls 37% of ALL US e-commerce. One company.",
+      "category": "E-Commerce & Cloud",
+      "marketData": {
+        "label": "US E-Commerce Market Share",
+        "dominated": 37,
+        "dominatedLabel": "Amazon",
+        "rest": 63,
+        "restLabel": "Everyone Else"
+      },
+      "alternativeProducts": [
+        {
+          "name": "Shop local or direct",
+          "reason": "Buy directly from brand websites and keep money out of Amazon's cut"
+        },
+        {
+          "name": "Refurbished & secondhand",
+          "reason": "Save money and reduce waste at the same time"
+        }
+      ],
+      "alternativeWebsites": [
+        {
+          "name": "eBay",
+          "url": "https://www.ebay.com",
+          "reason": "Huge marketplace, often cheaper, supports small sellers"
+        },
+        {
+          "name": "Walmart.com",
+          "url": "https://www.walmart.com",
+          "reason": "Comparable prices, no Prime subscription needed"
+        },
+        {
+          "name": "Newegg",
+          "url": "https://www.newegg.com",
+          "reason": "Great for electronics and tech products"
+        }
+      ]
+    },
+    {
+      "name": "Google",
+      "domains": ["google.com", "www.google.com"],
+      "message": "Google controls 92% of the global search engine market.",
+      "category": "Search & Advertising",
+      "marketData": {
+        "label": "Global Search Engine Market Share",
+        "dominated": 92,
+        "dominatedLabel": "Google",
+        "rest": 8,
+        "restLabel": "Everyone Else"
+      },
+      "alternativeProducts": [
+        {
+          "name": "DuckDuckGo",
+          "reason": "Does not track you or build an ad profile on you"
+        },
+        {
+          "name": "Brave Search",
+          "reason": "Independent search index, privacy focused"
+        },
+        {
+          "name": "Bing",
+          "reason": "Microsoft-owned, competitive results, different data ecosystem"
+        }
+      ],
+      "alternativeWebsites": [
+        {
+          "name": "DuckDuckGo",
+          "url": "https://duckduckgo.com",
+          "reason": "Private search, no tracking"
+        },
+        {
+          "name": "Brave Search",
+          "url": "https://search.brave.com",
+          "reason": "Fully independent search index"
+        }
+      ]
+    },
+    {
+      "name": "OpenAI",
+      "domains": ["chat.openai.com", "openai.com"],
+      "message": "OpenAI holds the largest share of the generative AI market and is rapidly consolidating it.",
+      "category": "Artificial Intelligence",
+      "marketData": {
+        "label": "Generative AI Market Share",
+        "dominated": 55,
+        "dominatedLabel": "OpenAI",
+        "rest": 45,
+        "restLabel": "Everyone Else"
+      },
+      "alternativeProducts": [
+        {
+          "name": "Claude (Anthropic)",
+          "reason": "Strong reasoning, safety focused, competitive performance"
+        },
+        {
+          "name": "Gemini (Google)",
+          "reason": "Integrated with Google tools, free tier available"
+        },
+        {
+          "name": "Mistral",
+          "reason": "Open source friendly, European company, strong privacy stance"
+        }
+      ],
+      "alternativeWebsites": [
+        {
+          "name": "Claude",
+          "url": "https://claude.ai",
+          "reason": "Anthropic's AI assistant, safety-first approach"
+        },
+        {
+          "name": "Perplexity",
+          "url": "https://www.perplexity.ai",
+          "reason": "AI-powered search, cites its sources"
+        }
+      ]
+    },
+    {
+      "name": "Meta",
+      "domains": ["facebook.com", "instagram.com", "meta.com", "www.facebook.com", "www.instagram.com"],
+      "message": "Meta owns Facebook, Instagram, and WhatsApp — controlling how over 3 billion people communicate.",
+      "category": "Social Media",
+      "marketData": {
+        "label": "Social Media Users Under One Company",
+        "dominated": 72,
+        "dominatedLabel": "Meta Platforms",
+        "rest": 28,
+        "restLabel": "Independent Platforms"
+      },
+      "alternativeProducts": [
+        {
+          "name": "Signal",
+          "reason": "End-to-end encrypted messaging, nonprofit, no ads"
+        },
+        {
+          "name": "Mastodon",
+          "reason": "Decentralized social network, no single company controls it"
+        },
+        {
+          "name": "BeReal",
+          "reason": "Independent social app, no Meta ownership"
+        }
+      ],
+      "alternativeWebsites": [
+        {
+          "name": "Signal",
+          "url": "https://signal.org",
+          "reason": "Private messaging, nonprofit"
+        },
+        {
+          "name": "Mastodon",
+          "url": "https://joinmastodon.org",
+          "reason": "Decentralized, community owned"
+        }
+      ]
+    },
+    {
+      "name": "Netflix",
+      "domains": ["netflix.com", "www.netflix.com"],
+      "message": "Netflix dominates streaming with over 260 million subscribers globally.",
+      "category": "Streaming",
+      "marketData": {
+        "label": "US Streaming Market Share",
+        "dominated": 21,
+        "dominatedLabel": "Netflix",
+        "rest": 79,
+        "restLabel": "All Other Services"
+      },
+      "alternativeProducts": [
+        {
+          "name": "Tubi",
+          "reason": "Completely free, ad-supported, thousands of titles"
+        },
+        {
+          "name": "Mubi",
+          "reason": "Indie and international films, supports smaller creators"
+        },
+        {
+          "name": "Library streaming (Kanopy/Hoopla)",
+          "reason": "Free with a library card, supports public institutions"
+        }
+      ],
+      "alternativeWebsites": [
+        {
+          "name": "Tubi",
+          "url": "https://tubitv.com",
+          "reason": "Free streaming, no subscription"
+        },
+        {
+          "name": "Kanopy",
+          "url": "https://kanopy.com",
+          "reason": "Free with library card"
+        }
+      ]
+    }
+  ]
+}

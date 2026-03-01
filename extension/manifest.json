@@ -22,10 +22,17 @@
         "<all_urls>"
       ],
       "js": [
+        "chart.min.js",
         "budget_burner.js",
         "deja_vu.js",
         "main.js"
       ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["chart.min.js", "companies.json"],
+      "matches": ["<all_urls>"]
     }
   ]
 }

@@ -213,19 +213,84 @@ function triggerSecondLook() {
             updateBudgetMessage("⚠️ Connectivity Issue: Reaching out to bank...");
         }
 
-        // 3. Trigger Semantic AI Analysis
+        // 3. Trigger Consolidated AI Analysis (Deja Vu + Ethical)
         chrome.runtime.sendMessage({
             action: "askGemini",
             semanticHtml: semanticHtml,
             pastPurchases: pastPurchases
         }, (geminiResponse) => {
-            if (geminiResponse && geminiResponse.success && Array.isArray(geminiResponse.data) && geminiResponse.data.length > 0) {
-                injectDejaVuWarning(geminiResponse.data);
+            if (geminiResponse && geminiResponse.success && geminiResponse.data) {
+                const { dejaVu_matches, ethical_insights } = geminiResponse.data;
+                
+                // Render Matches
+                if (dejaVu_matches && dejaVu_matches.length > 0) {
+                    injectDejaVuWarning(dejaVu_matches);
+                } else {
+                    injectDejaVuSafe();
+                }
+
+                // Render Ethical Insights
+                if (ethical_insights && ethical_insights.hasMarketData) {
+                    injectEthicalWarning(ethical_insights);
+                }
             } else {
                 injectDejaVuSafe();
             }
         });
     });
+}
+
+function injectEthicalWarning(insights) {
+    const container = document.getElementById('sl-ethical-container');
+    if (!container) return;
+
+    container.style.display = 'block';
+    
+    let html = `
+        <h3 style="margin: 0; font-size: 12px; text-transform: uppercase; color: #1e293b; letter-spacing: 1px; font-weight: 700;">🌍 Ethical Guardian</h3>
+        <p style="margin: 8px 0; font-size: 13px; color: #475569; line-height: 1.4;">${insights.message}</p>
+        
+        <div style="height: 120px; margin: 15px 0;">
+            <canvas id="sl-ethical-chart"></canvas>
+        </div>
+        
+        <div style="margin-top: 15px;">
+            <span style="font-size: 11px; text-transform: uppercase; color: #6366f1; font-weight: 700;">Indie Alternatives:</span>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+    `;
+
+    insights.alternatives.forEach(alt => {
+        html += `
+            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                <div style="font-weight: 700; font-size: 12px; color: #1e293b;">${alt.name}</div>
+                <div style="font-size: 11px; color: #64748b;">${alt.reason}</div>
+            </div>
+        `;
+    });
+
+    html += `</div></div>`;
+    container.innerHTML = html;
+
+    // Render Chart (Wait for script to be ready)
+    if (typeof Chart !== 'undefined') {
+        const ctx = document.getElementById('sl-ethical-chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [insights.marketData.dominatedLabel, insights.marketData.restLabel],
+                datasets: [{
+                    data: [insights.marketData.dominated, insights.marketData.rest],
+                    backgroundColor: ['#ef4444', '#f1f5f9'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: '70%',
+                plugins: { legend: { display: false } },
+                maintainAspectRatio: false
+            }
+        });
+    }
 }
 
 // Helper to update just the budget text in the visible banner
@@ -299,7 +364,13 @@ function showBanner(dejaVuMessage, budgetMessage, cartTotal) {
             </div>
         `;
 
-        sidebar.innerHTML = htmlContent + dejaVuHtml + `
+        // 🌍 Ethical Guardian Section (Placeholder)
+        let ethicalHtml = `
+            <div id="sl-ethical-container" style="background: #f1f5f9; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; display: none; flex-direction: column; gap: 10px;">
+            </div>
+        `;
+
+        sidebar.innerHTML = htmlContent + dejaVuHtml + ethicalHtml + `
             <div style="margin-top: auto; font-size: 11px; color: #94a3b8; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 10px;">
                 Cart Total: $${cartTotal.toFixed(2)}
             </div>
