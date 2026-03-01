@@ -110,6 +110,7 @@ function getSemanticCartHtml() {
     }
 
     const semanticItems = [];
+    const contentTags = new Set(['a', 'span', 'img', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'li', 'b', 'i', 'strong']);
     
     // Helper to extract clean text from a node
     const getCleanText = (node) => {
@@ -120,36 +121,35 @@ function getSemanticCartHtml() {
             .join(" ");
     };
 
-    // Robust walk: Pick up attributes AND text from all elements
     const walk = (node) => {
         if (node.nodeType === Node.ELEMENT_NODE) {
             const tagName = node.tagName.toLowerCase();
-            const attrs = [];
             
-            // Critical metadata attributes
-            ['alt', 'title', 'aria-label'].forEach(attr => {
-                if (node.hasAttribute(attr)) {
-                    attrs.push(`${attr}="${node.getAttribute(attr)}"`);
+            // Skip structural/noisy tags to save space
+            if (contentTags.has(tagName)) {
+                const attrs = [];
+                ['alt', 'title', 'aria-label'].forEach(attr => {
+                    if (node.hasAttribute(attr)) {
+                        attrs.push(`${attr}="${node.getAttribute(attr)}"`);
+                    }
+                });
+
+                const nodeText = getCleanText(node);
+                if (attrs.length > 0 || nodeText.length > 0) {
+                    semanticItems.push(`<${tagName} ${attrs.join(' ')}>${nodeText}</${tagName}>`);
                 }
-            });
-
-            // Extract text from THIS node specifically (not descendants yet)
-            const nodeText = getCleanText(node);
-
-            // If we have data, save this "semantic fragment"
-            if (attrs.length > 0 || nodeText.length > 0) {
-                semanticItems.push(`<${tagName} ${attrs.join(' ')}>${nodeText}</${tagName}>`);
             }
 
-            // Recurse
+            // Recurse into all children (even if parent was skipped)
             Array.from(node.children).forEach(walk);
         }
     };
 
     walk(targetContainer);
     
-    const semanticHtml = semanticItems.join('\n').substring(0, 4500); 
-    console.log("🧬 Semantic HTML Skeleton (for AI):", semanticHtml.substring(0, 100) + "...");
+    // Joint items with spaces to be more compact
+    const semanticHtml = semanticItems.join(' ').substring(0, 5000); 
+    console.log("🧬 Optimized Semantic HTML (for AI):", semanticHtml.substring(0, 100) + "...");
     return semanticHtml;
 }
 

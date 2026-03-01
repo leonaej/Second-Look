@@ -97,10 +97,12 @@ Purchase History:
 ${historyText}
 
 Task:
-1. Extract actual products from the HTML (ignore nav links).
-2. Match them against the history (direct match or same specific category).
-3. Return ONLY a JSON array: [{"cart_item": "clean item name", "history_item": "matching history", "category": "category", "purchase_date": "from history"}]
-Respond ONLY with JSON. No markdown. If none, return [].`;
+1. Identify ALL unique products in the HTML skeleton. 
+2. Match EVERY product against the history. A match occurs if:
+   - High semantic similarity (e.g., 'Winter Ear muffs' matches 'FUZZY EARMUFFS').
+   - Same specific category (e.g., another pair of Earmuffs, a second Steam Iron).
+3. Return a JSON array of ALL matches found: [{"cart_item": "clean name", "history_item": "matching history", "category": "CATEGORY", "purchase_date": "YYYY-MM-DD"}]
+Respond ONLY with the JSON array. If no matches, return [].`;
 
         console.log("⚡ Sending Semantic HTML Prompt to Gemini (gemini-3-flash-preview)...");
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
