@@ -172,6 +172,32 @@ body {
   color: #2f80ed;
 }
 
+/* ===== LOADING SCREEN ===== */
+.loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 16px;
+  color: #888888;
+  font-size: 13px;
+}
+
+/* The spinning circle animation */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #2a2a2a;
+  border-top-color: #2f80ed;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ===== NO MATCH SCREEN ===== */
 /* Shown when user is on a site we don't track */
 .no-match-box {
@@ -185,5 +211,31 @@ body {
 }
 
 .no-match-box strong {
+  color: #ffffff;
+}
+
+.why-section {
+  padding: 0 16px 12px;
+}
+
+.why-button {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  background-color: transparent;
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  color: #e74c3c;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  box-sizing: border-box;
+}
+
+.why-button:hover {
+  background-color: #e74c3c;
   color: #ffffff;
 }

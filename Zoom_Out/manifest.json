@@ -10,6 +10,10 @@
     "storage"
   ],
 
+  "host_permissions": [
+    "https://generativelanguage.googleapis.com/*"
+  ],
+
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -34,7 +38,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["companies.json"],
+      "resources": ["chart.min.js"],
       "matches": ["<all_urls>"]
     }
   ]
