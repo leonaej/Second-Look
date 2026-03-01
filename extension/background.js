@@ -85,6 +85,27 @@ async function askGeminiDejaVu(semanticHtml, pastPurchases) {
     }
 
     try {
+        // --- 1. OPTIMIZED ETHICAL CACHE CHECK --- //
+        // For simple domain checks (from popup), we can cache the entire result for 24h
+        let domain = "";
+        try {
+            // Try to extract domain from semanticHtml if it's just a domain string (from popup.js)
+            if (semanticHtml.startsWith("Current Website Domain:")) {
+                domain = semanticHtml.split(": ")[1];
+            }
+        } catch (e) {}
+
+        if (domain) {
+            const cacheKey = `ethical_cache_${domain}`;
+            const cached = await new Promise(resolve => chrome.storage.local.get([cacheKey], resolve));
+            const now = Date.now();
+            
+            if (cached[cacheKey] && (now - cached[cacheKey].timestamp < 86400000)) { // 24 hours
+                console.log(`💾 Using cached Ethical insights for: ${domain}`);
+                return cached[cacheKey].data;
+            }
+        }
+
         const historyText = pastPurchases.slice(0, 25).map(p => `- ${p.description} (${p.purchase_date})`).join("\n");
 
         const prompt = `
@@ -180,6 +201,28 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
         try {
             const result = JSON.parse(text);
             console.log("✅ Consolidated AI Insights received.");
+
+            // --- 2. OPTIMIZED ETHICAL CACHE SAVE --- //
+            if (result.ethical_insights?.hasMarketData) {
+                let domain = "";
+                try {
+                    if (semanticHtml.startsWith("Current Website Domain:")) {
+                        domain = semanticHtml.split(": ")[1];
+                    }
+                } catch (e) {}
+
+                if (domain) {
+                    const cacheKey = `ethical_cache_${domain}`;
+                    chrome.storage.local.set({
+                        [cacheKey]: {
+                            data: result,
+                            timestamp: Date.now()
+                        }
+                    });
+                    console.log(`💾 Cached Ethical insights for: ${domain}`);
+                }
+            }
+
             return result;
         } catch (parseErr) {
             console.error("❌ Final JSON Parse failed:", parseErr, text);
