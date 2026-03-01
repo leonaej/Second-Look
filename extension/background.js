@@ -148,7 +148,7 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
       "rest": 63
     },
     "alternatives": [
-      { "name": "Indie Brand", "url": "https://example.com", "reason": "Reason why it is better/ethical" }
+      { "name": "Indie Brand", "target_product": "Original Item Name", "url": "https://example.com", "reason": "Reason why it is better/ethical" }
     ]
   }
 }

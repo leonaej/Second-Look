@@ -264,8 +264,10 @@ function injectEthicalWarning(insights) {
     `;
 
     insights.alternatives.forEach(alt => {
+        const targetTag = alt.target_product ? `<div style="font-size: 10px; text-transform: uppercase; color: #6366f1; font-weight: 700; margin-bottom: 2px;">For ${alt.target_product}:</div>` : "";
         html += `
             <a href="${alt.url || "#"}" target="_blank" style="display: block; text-decoration: none; background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); margin-bottom: 8px; transition: transform 0.2s ease;">
+                ${targetTag}
                 <div style="font-weight: 700; font-size: 12px; color: #1e293b; display: flex; justify-content: space-between; align-items: center;">
                     ${alt.name}
                     <span style="font-size: 10px; opacity: 0.5;">↗</span>
