@@ -1,6 +1,6 @@
 const NESSIE_API_KEY = "ce4f96b83e029b00b328ab78043f8bcb";
 const DEMO_ACCOUNT_ID = "69a3626c95150878eaffaea5"; // Created via Nessie API
-const GEMINI_API_KEY = "AIzaSyBAohi7EMtDz2kJworOZEzcil56D-WpB-c";
+const GEMINI_API_KEY = "AIzaSyBaYXjO8eHYd81KSTXngVnL2z50cziXxFY";
 const CACHE_VERSION = "v3"; // Bump this to invalidate all old caches
 
 // Listener for messages from the content script
@@ -222,11 +222,45 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
             const result = JSON.parse(text);
             console.log("✅ Consolidated AI Insights received.");
 
-            // --- URL CONSTRUCTION: Build reliable Google Shopping links --- //
+            // --- URL CONSTRUCTION: Build direct brand website search links --- //
+            const BRAND_SEARCH_PATTERNS = {
+                'etsy':        (q) => 'https://www.etsy.com/search?q=' + q,
+                'thredup':     (q) => 'https://www.thredup.com/search?query_text=' + q,
+                'poshmark':    (q) => 'https://poshmark.com/search?query=' + q,
+                'reformation': (q) => 'https://www.thereformation.com/search?q=' + q,
+                'depop':       (q) => 'https://www.depop.com/search/?q=' + q,
+                'patagonia':   (q) => 'https://www.patagonia.com/search/?q=' + q,
+                'target':      (q) => 'https://www.target.com/s?searchTerm=' + q,
+                'walmart':     (q) => 'https://www.walmart.com/search?q=' + q,
+                'ebay':        (q) => 'https://www.ebay.com/sch/i.html?_nkw=' + q,
+                'zappos':      (q) => 'https://www.zappos.com/search?term=' + q,
+                'nordstrom rack': (q) => 'https://www.nordstromrack.com/search?query=' + q,
+                'rei':         (q) => 'https://www.rei.com/search?q=' + q,
+                'hm':          (q) => 'https://www2.hm.com/en_us/search-results.html?q=' + q,
+                'h&m':         (q) => 'https://www2.hm.com/en_us/search-results.html?q=' + q,
+                'zara':        (q) => 'https://www.zara.com/us/en/search?searchTerm=' + q,
+                'uniqlo':      (q) => 'https://www.uniqlo.com/us/en/search?q=' + q,
+                'asos':        (q) => 'https://www.asos.com/us/search/?q=' + q,
+                'mubi':        (q) => 'https://mubi.com/en/search?query=' + q,
+                'tubi':        (q) => 'https://tubitv.com/search/' + q,
+                'bandcamp':    (q) => 'https://bandcamp.com/search?q=' + q,
+            };
+
             if (result.ethical_insights?.alternatives) {
                 result.ethical_insights.alternatives = result.ethical_insights.alternatives.map(alt => {
-                    const searchQuery = encodeURIComponent((alt.target_product || 'products') + ' ' + alt.name);
-                    alt.url = 'https://www.google.com/search?tbm=shop&q=' + searchQuery;
+                    const product = alt.target_product || 'products';
+                    const searchTerm = encodeURIComponent(product);
+                    const brandKey = alt.name.toLowerCase().trim();
+
+                    // Find matching brand pattern
+                    const matchedKey = Object.keys(BRAND_SEARCH_PATTERNS).find(k => brandKey.includes(k));
+
+                    if (matchedKey) {
+                        alt.url = BRAND_SEARCH_PATTERNS[matchedKey](searchTerm);
+                    } else {
+                        // Fallback: Google search scoped to the brand
+                        alt.url = 'https://www.google.com/search?q=' + encodeURIComponent(product + ' site:' + brandKey.replace(/\s+/g, '') + '.com');
+                    }
                     return alt;
                 });
             }
