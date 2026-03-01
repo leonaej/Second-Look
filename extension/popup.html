@@ -1,239 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Second Look Dashboard</title>
-    <script src="chart.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
-
-        body {
-            width: 380px;
-            margin: 0;
-            padding: 0;
-            background: #0f172a;
-            font-family: 'Outfit', sans-serif;
-            color: white;
-            overflow-x: hidden;
-        }
-
-        .container {
-            padding: 20px;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            min-height: 480px;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 25px;
-        }
-
-        .logo {
-            font-size: 18px;
-            font-weight: 800;
-            background: linear-gradient(90deg, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .guardian-badge {
-            background: rgba(129, 140, 248, 0.1);
-            color: #818cf8;
-            padding: 4px 10px;
-            border-radius: 100px;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 1px solid rgba(129, 140, 248, 0.2);
-        }
-
-        .warning-box {
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 4px solid #ef4444;
-            padding: 15px;
-            border-radius: 0 12px 12px 0;
-            margin-bottom: 20px;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        #company-message {
-            margin: 0;
-            font-size: 14px;
-            line-height: 1.5;
-            color: #fca5a5;
-            font-weight: 500;
-        }
-
-        .chart-container {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            padding: 25px;
-            height: 180px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .why-section {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .why-button {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .why-button:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .alt-section {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 20px;
-            padding: 15px;
-        }
-
-        .section-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #6366f1;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .alt-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px;
-            padding: 12px;
-            margin-bottom: 8px;
-            transition: transform 0.2s;
-        }
-
-        .alt-item:hover {
-            transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .alt-name {
-            font-weight: 700;
-            font-size: 14px;
-            color: white;
-        }
-
-        .alt-reason {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-top: 4px;
-            line-height: 1.4;
-        }
-
-        .loading-view, .no-match-view {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(129, 140, 248, 0.1);
-            border-top: 3px solid #818cf8;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .hidden { display: none; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Second Look – Ethical Guardian</title>
+  <link rel="stylesheet" href="popup.css" />
 </head>
 
 <body>
-    <div class="container">
-        <!-- Main Ethical View -->
-        <div id="zoom-out-view" class="hidden">
-            <div class="header">
-                <span class="logo">Second Look</span>
-                <span class="guardian-badge">Ethical Guardian</span>
-            </div>
+  <div class="container">
 
-            <div class="warning-box">
-                <p id="company-message">Scanning domain context...</p>
-            </div>
+    <!-- SCREEN 1: Main Ethical Dashboard -->
+    <div id="zoom-out-view" class="hidden">
+      <div class="header">
+        <span class="logo">Second Look</span>
+        <span class="tag">Ethical Guardian</span>
+      </div>
 
-            <div class="chart-container">
-                <canvas id="popup-ethical-chart"></canvas>
-            </div>
+      <div class="warning-box">
+        <p id="company-message">Scanning domain context...</p>
+      </div>
 
-            <div class="why-section">
-                <a href="https://leonaej.github.io/#" target="_blank" class="why-button">
-                    <span>⚠️</span> WHY should you care?
-                </a>
-            </div>
+      <div class="chart-container">
+        <canvas id="popup-ethical-chart"></canvas>
+      </div>
 
-            <div class="alt-section">
-                <div class="section-title">Support Independent Alternatives</div>
-                <div id="alt-list">
-                    <!-- Alternatives injected here -->
-                </div>
-            </div>
+      <div class="why-section">
+        <a href="https://leonaej.github.io/#" target="_blank" class="why-button">
+          <span>⚠️</span> WHY should you care?
+        </a>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title" id="alt-section-title">Support Independent Alternatives</h3>
+        <div id="alt-list">
+          <!-- Alternatives injected by popup.js -->
         </div>
-
-        <!-- Loading View -->
-        <div id="loading-view">
-            <div class="header">
-                <span class="logo">Second Look</span>
-            </div>
-            <div class="loading-view">
-                <div class="spinner"></div>
-                <p style="color: #94a3b8; font-size: 14px;">Analyzing market dominance...</p>
-            </div>
-        </div>
-
-        <!-- No Match View -->
-        <div id="no-match-view" class="hidden">
-            <div class="header">
-                <span class="logo">Second Look</span>
-            </div>
-            <div class="no-match-view">
-                <div style="font-size: 32px; margin-bottom: 20px;">🕵️‍♂️</div>
-                <p style="font-weight: 700; font-size: 16px; margin-bottom: 10px;">Market Analysis Idle</p>
-                <p style="color: #94a3b8; font-size: 13px; line-height: 1.6;">Visit a site like Amazon, Google, or Netflix to see what's really going on behind the scenes.</p>
-            </div>
-        </div>
+      </div>
     </div>
-    <script src="popup.js"></script>
+
+    <!-- SCREEN 2: Loading Spinner -->
+    <div id="loading-view">
+      <div class="header">
+        <span class="logo">Second Look</span>
+      </div>
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <p>Analyzing market dominance...</p>
+      </div>
+    </div>
+
+    <!-- SCREEN 3: No Match -->
+    <div id="no-match-view" class="hidden">
+      <div class="header">
+        <span class="logo">Second Look</span>
+      </div>
+      <div class="no-match-box">
+        <div class="icon">🕵️‍♂️</div>
+        <div class="title">Market Analysis Idle</div>
+        <p class="subtitle">Visit a site like <strong>Amazon, Apple, Google, Netflix, Meta, or Spotify</strong> and we'll show you what's really going on.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="chart.min.js"></script>
+  <script src="popup.js"></script>
 </body>
 
 </html>

@@ -47,15 +47,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         altList.innerHTML = '';
         insights.alternatives.forEach(alt => {
             const card = document.createElement('a');
-            card.className = 'alt-item';
+            card.className = 'website-card';
             card.href = alt.url || "#";
             card.target = "_blank";
-            card.style.textDecoration = 'none';
-            const targetTag = alt.target_product ? `<div style="font-size: 10px; text-transform: uppercase; color: #818cf8; font-weight: 700; margin-bottom: 2px;">For ${alt.target_product}:</div>` : "";
+
+            const targetTag = alt.target_product 
+                ? `<div class="website-tag">For ${alt.target_product}</div>` 
+                : "";
+
             card.innerHTML = `
-                ${targetTag}
-                <div class="alt-name">${alt.name} <span style="font-size: 10px; opacity: 0.6;">↗</span></div>
-                <div class="alt-reason">${alt.reason}</div>
+                <div class="website-info">
+                    ${targetTag}
+                    <div class="website-name">${alt.name}</div>
+                    <div class="website-reason">${alt.reason}</div>
+                </div>
+                <div class="website-arrow">→</div>
             `;
             altList.appendChild(card);
         });
