@@ -102,8 +102,8 @@ Task:
 3. Return ONLY a JSON array: [{"cart_item": "clean item name", "history_item": "matching history", "category": "category", "purchase_date": "from history"}]
 Respond ONLY with JSON. No markdown. If none, return [].`;
 
-        console.log("⚡ Sending Semantic HTML Prompt to Gemini (gemini-3-flash)...");
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash:generateContent?key=${GEMINI_API_KEY}`;
+        console.log("⚡ Sending Semantic HTML Prompt to Gemini (gemini-3-flash-preview)...");
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
         
         const response = await fetch(url, {
             method: 'POST',
