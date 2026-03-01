@@ -1,6 +1,6 @@
 const NESSIE_API_KEY = "ce4f96b83e029b00b328ab78043f8bcb";
 const DEMO_ACCOUNT_ID = "69a3626c95150878eaffaea5"; // Created via Nessie API
-const GEMINI_API_KEY = "AIzaSyDgLIZY2XKqnKm8LLIceojm8-M03Rj0CEs";
+const GEMINI_API_KEY = "AIzaSyBq3xWp3o_dfKbBn4WNeNEWb222n_9J4bk";
 
 // Listener for messages from the content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
