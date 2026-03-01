@@ -46,13 +46,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Render Alternatives
         altList.innerHTML = '';
         insights.alternatives.forEach(alt => {
-            const div = document.createElement('div');
-            div.className = 'alt-item';
-            div.innerHTML = `
-                <div class="alt-name">${alt.name}</div>
+            const card = document.createElement('a');
+            card.className = 'alt-item';
+            card.href = alt.url || "#";
+            card.target = "_blank";
+            card.style.textDecoration = 'none';
+            card.innerHTML = `
+                <div class="alt-name">${alt.name} <span style="font-size: 10px; opacity: 0.6;">↗</span></div>
                 <div class="alt-reason">${alt.reason}</div>
             `;
-            altList.appendChild(div);
+            altList.appendChild(card);
         });
 
         // Render Chart

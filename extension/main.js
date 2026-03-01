@@ -250,6 +250,10 @@ function injectEthicalWarning(insights) {
         <h3 style="margin: 0; font-size: 12px; text-transform: uppercase; color: #1e293b; letter-spacing: 1px; font-weight: 700;">🌍 Ethical Guardian</h3>
         <p style="margin: 8px 0; font-size: 13px; color: #475569; line-height: 1.4;">${insights.message}</p>
         
+        <div style="margin-bottom: 10px;">
+            <a href="https://leonaej.github.io/#" target="_blank" style="font-size: 11px; color: #6366f1; text-decoration: none; font-weight: 600;">⚠️ Why should you care?</a>
+        </div>
+        
         <div style="height: 120px; margin: 15px 0;">
             <canvas id="sl-ethical-chart"></canvas>
         </div>
@@ -261,10 +265,13 @@ function injectEthicalWarning(insights) {
 
     insights.alternatives.forEach(alt => {
         html += `
-            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-                <div style="font-weight: 700; font-size: 12px; color: #1e293b;">${alt.name}</div>
-                <div style="font-size: 11px; color: #64748b;">${alt.reason}</div>
-            </div>
+            <a href="${alt.url || "#"}" target="_blank" style="display: block; text-decoration: none; background: white; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); margin-bottom: 8px; transition: transform 0.2s ease;">
+                <div style="font-weight: 700; font-size: 12px; color: #1e293b; display: flex; justify-content: space-between; align-items: center;">
+                    ${alt.name}
+                    <span style="font-size: 10px; opacity: 0.5;">↗</span>
+                </div>
+                <div style="font-size: 11px; color: #64748b; margin-top: 4px;">${alt.reason}</div>
+            </a>
         `;
     });
 
