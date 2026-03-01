@@ -3,6 +3,9 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Second Look files
+Zoom_Out
+
 # C extensions
 *.so
 

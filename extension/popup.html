@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Second Look Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+        body {
+            width: 350px;
+            margin: 0;
+            padding: 0;
+            background: #f0f2f5;
+            font-family: 'Outfit', sans-serif;
+            color: #1a1a1a;
+            overflow-x: hidden;
+        }
+
+        .container {
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            margin: 0;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .balance-label {
+            font-size: 13px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .budget-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .budget-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #6366f1;
+        }
+
+        .btn-save {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-save:hover {
+            background: #4f46e5;
+        }
+
+        .btn-save:active {
+            transform: scale(0.95);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .history-item {
+            padding: 12px;
+            border-radius: 12px;
+            background: white;
+            margin-bottom: 8px;
+            border: 1px solid #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .history-item .desc {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .history-item .meta {
+            font-size: 12px;
+            color: #94a3b8;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .history-item .amount {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SECOND LOOK</h1>
+        </div>
+
+        <div class="card">
+            <div class="section-title" style="margin-bottom: 12px; font-size: 16px;">
+                <span>🎯 Monthly Safe-to-Spend</span>
+            </div>
+
+            <div style="text-align: center; padding: 10px 0 20px 0;">
+                <div id="calculated-budget" style="font-size: 42px; font-weight: 700; color: #6366f1;">$0.00</div>
+                <div class="balance-label" style="font-size: 11px; margin-top: 5px;">Your Calculated Budget Target</div>
+            </div>
+
+            <div class="budget-section">
+                <div class="section-title" style="margin-bottom: 12px;">
+                    <span>📊 Smart Budget Allocation</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label class="balance-label" style="font-size: 10px;">Monthly Salary</label>
+                        <input type="number" id="salary-input" placeholder="e.g. 5000">
+                    </div>
+                    <div>
+                        <label class="balance-label" style="font-size: 10px;">Rent / Mortgage</label>
+                        <input type="number" id="rent-input" placeholder="e.g. 1500">
+                    </div>
+                    <div>
+                        <label class="balance-label" style="font-size: 10px;">Loan EMIs</label>
+                        <input type="number" id="loans-input" placeholder="e.g. 300">
+                    </div>
+                    <div>
+                        <label class="balance-label" style="font-size: 10px;">Monthly Savings</label>
+                        <input type="number" id="savings-input" placeholder="e.g. 1000">
+                    </div>
+                </div>
+
+
+                <div class="budget-input-group" style="margin-top: 15px;">
+                    <button id="save-budget" class="btn-save" style="width: 100%;">Save Allocation</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <span>🕒 Recent Activity</span>
+        </div>
+
+        <ul id="history-list" class="history-list">
+            <!-- Activity items will be injected here -->
+            <div id="loading" class="loading-spinner">Fetching Nessie bank data...</div>
+        </ul>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>
