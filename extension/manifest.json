@@ -4,7 +4,9 @@
   "version": "1.0",
   "description": "Mindful and ethical shopping assistant",
   "permissions": [
-    "storage"
+    "storage",
+    "activeTab",
+    "tabs"
   ],
   "host_permissions": [
     "http://api.nessieisreal.com/*",

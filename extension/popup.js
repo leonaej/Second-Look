@@ -21,12 +21,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 2. Fetch Ethical Context for the current domain
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    console.log("📍 Current Tab Found:", tab?.url);
+
     if (tab && tab.url && !tab.url.startsWith("chrome://")) {
         const url = new URL(tab.url);
         const domain = url.hostname.replace(/^www\./, "");
+        console.log("🔍 Extracting Ethical Insights for:", domain);
         
         // Check for market dominance data
         fetchEthicalInsights(domain);
+    } else {
+        console.warn("⚠️ No valid URL found or on a chrome:// page.");
     }
 
     async function fetchEthicalInsights(domain) {
