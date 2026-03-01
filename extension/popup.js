@@ -1,83 +1,28 @@
-// Popup logic for Second Look Dashboard
+// Popup logic for Second Look Dashboard (Nessie-First)
 
 document.addEventListener('DOMContentLoaded', async () => {
     const historyList = document.getElementById('history-list');
     const loadingEl = document.getElementById('loading');
-    
-    // Smart Budget Inputs
-    const salaryInput = document.getElementById('salary-input');
-    const rentInput = document.getElementById('rent-input');
-    const loansInput = document.getElementById('loans-input');
-    const savingsInput = document.getElementById('savings-input');
     const calculatedBudgetEl = document.getElementById('calculated-budget');
-    const saveBudgetBtn = document.getElementById('save-budget');
 
-    // 1. Load existing financial data from storage
-    chrome.storage.local.get(['salary', 'rent', 'loans', 'savings', 'monthlyBudget'], (result) => {
-        if (result.salary) salaryInput.value = result.salary;
-        if (result.rent) rentInput.value = result.rent;
-        if (result.loans) loansInput.value = result.loans;
-        if (result.savings) savingsInput.value = result.savings;
-
-        if (result.monthlyBudget) {
-            calculatedBudgetEl.innerText = `$${result.monthlyBudget.toFixed(2)}`;
-        }
-    });
-
-    // 2. Fetch current bank history only
+    // 1. Fetch current bank data (Balance + History)
     chrome.runtime.sendMessage({ action: "getNessieData" }, (response) => {
         if (response && response.success) {
-            const { purchases } = response.data;
+            const { balance, purchases } = response.data;
+            
+            // Update Balance Display
+            calculatedBudgetEl.innerText = `$${balance.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            // Render History
             renderHistory(purchases);
         } else {
-            console.log("Nessie history failed to load");
+            console.error("Nessie history failed to load");
+            if (calculatedBudgetEl) calculatedBudgetEl.innerText = "Error ⚠️";
         }
-    });
-
-    // 3. Calculation Logic
-    const calculateBudget = () => {
-        const salary = parseFloat(salaryInput.value) || 0;
-        const rent = parseFloat(rentInput.value) || 0;
-        const loans = parseFloat(loansInput.value) || 0;
-        const savings = parseFloat(savingsInput.value) || 0;
-
-        const remaining = salary - rent - loans - savings;
-        calculatedBudgetEl.innerText = `$${remaining.toFixed(2)}`;
-        return remaining;
-    };
-
-    [salaryInput, rentInput, loansInput, savingsInput].forEach(input => {
-        input.addEventListener('input', calculateBudget);
-    });
-
-    // 4. Handle Save Allocation
-    saveBudgetBtn.addEventListener('click', () => {
-        const salary = parseFloat(salaryInput.value) || 0;
-        const rent = parseFloat(rentInput.value) || 0;
-        const loans = parseFloat(loansInput.value) || 0;
-        const savings = parseFloat(savingsInput.value) || 0;
-        const remaining = calculateBudget();
-
-        const dataToSave = {
-            salary,
-            rent,
-            loans,
-            savings,
-            monthlyBudget: remaining
-        };
-
-        chrome.storage.local.set(dataToSave, () => {
-            saveBudgetBtn.innerText = "Goal Fixed! ✅";
-            saveBudgetBtn.style.background = "#059669";
-            setTimeout(() => {
-                saveBudgetBtn.innerText = "Save Allocation";
-                saveBudgetBtn.style.background = "#6366f1";
-            }, 2000);
-        });
     });
 
     function renderHistory(purchases) {
-        loadingEl.remove();
+        if (loadingEl) loadingEl.remove();
 
         if (!purchases || purchases.length === 0) {
             historyList.innerHTML = '<li class="loading-spinner">No recent activity found.</li>';

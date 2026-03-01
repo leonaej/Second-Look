@@ -201,21 +201,18 @@ function triggerSecondLook() {
     // 2. Request Nessie data and start AI analysis
     chrome.runtime.sendMessage({ action: "getNessieData" }, (response) => {
         const pastPurchases = (response && response.success) ? response.data.purchases : [];
+        const nessieBalance = (response && response.success) ? response.data.balance : 0;
 
-        // Fetch user-defined budget
-        chrome.storage.local.get(['monthlyBudget'], (storageResult) => {
-            const monthlyBudget = storageResult.monthlyBudget || 500; 
-            
-            if (response && response.success) {
-                if (typeof runBudgetBurner === 'function') {
-                    const budgetMessage = runBudgetBurner(cartTotal, monthlyBudget);
-                    updateBudgetMessage(budgetMessage);
-                }
-            } else {
-                updateBudgetMessage("⚠️ Connectivity Issue: Reaching out to bank...");
+        if (response && response.success) {
+            if (typeof runBudgetBurner === 'function') {
+                const budgetMessage = runBudgetBurner(cartTotal, nessieBalance);
+                updateBudgetMessage(budgetMessage);
             }
+        } else {
+            updateBudgetMessage("⚠️ Connectivity Issue: Reaching out to bank...");
+        }
 
-            // 3. Single-Shot AI Analysis (HTML Extraction + Matching)
+        // 3. Single-Shot AI Analysis (HTML Extraction + Matching)
             chrome.runtime.sendMessage({
                 action: "askGemini",
                 semanticHtml: semanticHtml, // SEND SEMANTIC HTML
