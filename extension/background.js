@@ -123,7 +123,7 @@ Analyze the website domain: ${semanticHtml.substring(0, 100)} (and the cart cont
 - Identify the parent company and their industry.
 - Find their consumer market share (e.g. "Amazon controls 37% of US e-commerce").
 - Recommend 2-3 smaller or independent alternatives for the items in the cart.
-- IMPORTANT: Provide **Deep Links**. The "url" should be a direct product page or a search result page on the suggested website that matches the specific items in the user's cart (e.g., if buying a kettle, link to the kettle search on the indie site).
+- IMPORTANT: Provide **Robust Search-Based Links**. Guessing direct product paths often leads to 404 errors. Instead, generate a Search Result URL for the specific product on the indie site (e.g., `https://thelittlemarket.com/search?q=ear+muffs` or `https://www.etsy.com/search?q=chiffon+dress`).
 
 SEMANTIC CART HTML:
 ${semanticHtml}
