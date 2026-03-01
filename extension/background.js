@@ -1,6 +1,6 @@
 const NESSIE_API_KEY = "ce4f96b83e029b00b328ab78043f8bcb";
 const DEMO_ACCOUNT_ID = "69a3626c95150878eaffaea5"; // Created via Nessie API
-const GEMINI_API_KEY = "AIzaSyBXr5B60PuXCqjxks2O1_O6DXhYNZZjdK0";
+const GEMINI_API_KEY = "AIzaSyBAohi7EMtDz2kJworOZEzcil56D-WpB-c";
 const CACHE_VERSION = "v3"; // Bump this to invalidate all old caches
 
 // Listener for messages from the content script
@@ -173,11 +173,26 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
                 })
             });
 
-            if (response.status !== 503) break;
+            if (response.status === 503) {
+                attempts++;
+                console.warn(`⚠️ Gemini 503 (High Demand). Retrying attempt ${attempts}...`);
+                await new Promise(r => setTimeout(r, 1000 * attempts));
+                continue;
+            }
 
-            attempts++;
-            console.warn(`⚠️ Gemini 503 (High Demand). Retrying attempt ${attempts}...`);
-            await new Promise(r => setTimeout(r, 1000 * attempts)); // Exponential backoff
+            if (response.status === 429) {
+                attempts++;
+                // Extract retry delay from response, default to 60s
+                const errData = await response.clone().json().catch(() => ({}));
+                const retryMsg = errData?.error?.message || "";
+                const delayMatch = retryMsg.match(/retry in (\d+)/i);
+                const waitSec = delayMatch ? parseInt(delayMatch[1]) : 60;
+                console.warn(`⚠️ Gemini 429 (Rate Limited). Waiting ${waitSec}s then retrying (attempt ${attempts})...`);
+                await new Promise(r => setTimeout(r, waitSec * 1000));
+                continue;
+            }
+
+            break; // Success or other error — exit loop
         }
 
         const data = await response.json();
