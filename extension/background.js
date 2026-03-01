@@ -1,6 +1,6 @@
 const NESSIE_API_KEY = "ce4f96b83e029b00b328ab78043f8bcb";
 const DEMO_ACCOUNT_ID = "69a3626c95150878eaffaea5"; // Created via Nessie API
-const GEMINI_API_KEY = "AIzaSyCZe5AYxkNrKFwsaSn2kHrXJ3oEf23jbxM";
+const GEMINI_API_KEY = "AIzaSyCQYV01_0aBK_wZECqhRaFnvbdRriL7R8Q";
 
 // Listener for messages from the content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -123,6 +123,7 @@ Analyze the website domain: ${semanticHtml.substring(0, 100)} (and the cart cont
 - Identify the parent company and their industry.
 - Find their consumer market share (e.g. "Amazon controls 37% of US e-commerce").
 - Recommend 2-3 smaller or independent alternatives for the items in the cart.
+- IMPORTANT: Provide **Deep Links**. The "url" should be a direct product page or a search result page on the suggested website that matches the specific items in the user's cart (e.g., if buying a kettle, link to the kettle search on the indie site).
 
 SEMANTIC CART HTML:
 ${semanticHtml}
