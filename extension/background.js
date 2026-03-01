@@ -1,6 +1,6 @@
 const NESSIE_API_KEY = "ce4f96b83e029b00b328ab78043f8bcb";
 const DEMO_ACCOUNT_ID = "69a3626c95150878eaffaea5"; // Created via Nessie API
-const GEMINI_API_KEY = "AIzaSyDxj_kfj4BEGROcZtNxlUTouIR_qzDmQPE";
+const GEMINI_API_KEY = "AIzaSyCZe5AYxkNrKFwsaSn2kHrXJ3oEf23jbxM";
 
 // Listener for messages from the content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -93,13 +93,13 @@ async function askGeminiDejaVu(semanticHtml, pastPurchases) {
             if (semanticHtml.startsWith("Current Website Domain:")) {
                 domain = semanticHtml.split(": ")[1];
             }
-        } catch (e) {}
+        } catch (e) { }
 
-        if (domain) {
+        if (domain && semanticHtml.startsWith("Current Website Domain:")) {
             const cacheKey = `ethical_cache_${domain}`;
             const cached = await new Promise(resolve => chrome.storage.local.get([cacheKey], resolve));
             const now = Date.now();
-            
+
             if (cached[cacheKey] && (now - cached[cacheKey].timestamp < 86400000)) { // 24 hours
                 console.log(`💾 Using cached Ethical insights for: ${domain}`);
                 return cached[cacheKey].data;
@@ -114,8 +114,9 @@ The user is at a checkout page. You have two missions:
 
 MISSION 1: DEJA VU (Past Purchases)
 Compare the current cart (Semantic HTML below) against the user's past purchases.
-- Ignore items that are different categories.
-- Flag a match ONLY if the user owns a very similar or identical product.
+- Think like a human shopper: If the user is buying a "Chiffon Square Neck Dress" and their history shows "CHIFFON SQUARE NECK LACE", this is almost certainly a duplicate or highly redundant purchase.
+- Ignore items that are clearly different categories (e.g. Toothbrush vs Dress).
+- Flag a match if the items share significant semantic features (material, style, function).
 
 MISSION 2: ETHICAL GUARDIAN (Market Dominance)
 Analyze the website domain: ${semanticHtml.substring(0, 100)} (and the cart context).
@@ -127,7 +128,7 @@ SEMANTIC CART HTML:
 ${semanticHtml}
 
 USER'S PAST PURCHASES:
-${JSON.stringify(pastPurchases)}
+${historyText}
 
 RESPOND ONLY in this JSON format. No extra text, no backticks:
 {
@@ -154,7 +155,7 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
 
         console.log("⚡ Sending Semantic + Ethical Prompt to Gemini (gemini-2.5-flash-lite)...");
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
-        
+
         let response;
         let attempts = 0;
         const maxAttempts = 3;
@@ -169,7 +170,7 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
             });
 
             if (response.status !== 503) break;
-            
+
             attempts++;
             console.warn(`⚠️ Gemini 503 (High Demand). Retrying attempt ${attempts}...`);
             await new Promise(r => setTimeout(r, 1000 * attempts)); // Exponential backoff
@@ -209,7 +210,7 @@ RESPOND ONLY in this JSON format. No extra text, no backticks:
                     if (semanticHtml.startsWith("Current Website Domain:")) {
                         domain = semanticHtml.split(": ")[1];
                     }
-                } catch (e) {}
+                } catch (e) { }
 
                 if (domain) {
                     const cacheKey = `ethical_cache_${domain}`;
