@@ -112,7 +112,7 @@ Respond ONLY with the JSON array. If no matches, return [].`;
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { temperature: 0.1, maxOutputTokens: 1000 }
+                generationConfig: { temperature: 0.1, maxOutputTokens: 1500 }
             })
         });
 
@@ -128,7 +128,22 @@ Respond ONLY with the JSON array. If no matches, return [].`;
         if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
             let text = result.candidates[0].content.parts[0].text.trim().replace(/```json|```/g, "");
             console.log("🔍 Cleaned AI JSON:", text);
-            return JSON.parse(text);
+            
+            try {
+                return JSON.parse(text);
+            } catch (syntaxErr) {
+                console.warn("⚠️ JSON Parse Error (Truncated?). Attempting rescue...", syntaxErr);
+                // Simple rescue: find the last valid object boundary
+                const lastBrace = text.lastIndexOf('}');
+                if (lastBrace !== -1) {
+                    try {
+                        const rescuedText = text.substring(0, lastBrace + 1) + ']';
+                        return JSON.parse(rescuedText);
+                    } catch (e) {
+                        console.error("❌ Rescue failed.");
+                    }
+                }
+            }
         }
         
         console.warn("⚠️ No text parts found in Gemini response.");

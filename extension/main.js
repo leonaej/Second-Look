@@ -147,9 +147,16 @@ function getSemanticCartHtml() {
 
     walk(targetContainer);
     
-    // Joint items with spaces to be more compact
-    const semanticHtml = semanticItems.join(' ').substring(0, 5000); 
-    console.log("🧬 Optimized Semantic HTML (for AI):", semanticHtml.substring(0, 100) + "...");
+    // Join items with newlines for better AI structure
+    let semanticHtml = semanticItems.join('\n');
+    
+    // Smart truncation: Don't cut in the middle of a tag
+    if (semanticHtml.length > 5000) {
+        const lastTagEnd = semanticHtml.lastIndexOf('>', 5000);
+        semanticHtml = semanticHtml.substring(0, lastTagEnd + 1);
+    }
+
+    console.log("🧬 Cleaned Semantic Skeleton (for AI):", semanticHtml.substring(0, 100) + "...");
     return semanticHtml;
 }
 
