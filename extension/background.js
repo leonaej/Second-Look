@@ -1,6 +1,6 @@
 const NESSIE_API_KEY = "ce4f96b83e029b00b328ab78043f8bcb";
 const DEMO_ACCOUNT_ID = "69a3626c95150878eaffaea5"; // Created via Nessie API
-const GEMINI_API_KEY = "AIzaSyCQYV01_0aBK_wZECqhRaFnvbdRriL7R8Q";
+const GEMINI_API_KEY = "AIzaSyBXr5B60PuXCqjxks2O1_O6DXhYNZZjdK0";
 
 // Listener for messages from the content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -123,7 +123,10 @@ Analyze the website domain: ${semanticHtml.substring(0, 100)} (and the cart cont
 - Identify the parent company and their industry.
 - Find their consumer market share (e.g. "Amazon controls 37% of US e-commerce").
 - Recommend 2-3 smaller or independent alternatives for the items in the cart.
-- IMPORTANT: Provide **Robust Search-Based Links**. Guessing direct product paths often leads to 404 errors. Instead, generate a Search Result URL for the specific product on the indie site (e.g., 'https://thelittlemarket.com/search?q=ear+muffs' or 'https://www.etsy.com/search?q=chiffon+dress').
+- **Rule 1: Strict Category Matching.** Only suggest stores that explicitly specialize in the item's primary category (e.g., only fashion brands for clothing). Do not suggest general gift/home shops for specialized goods.
+- **Rule 2: Query Simplification.** Use very simple search terms (e.g., 'earmuffs' or 'dress') in the URL to ensure the results page is not empty.
+- **Rule 3: Quality Guard.** If you cannot find a highly relevant, specialized alternative, return an empty `alternatives` array.
+- IMPORTANT: Provide **Robust Search-Based Links**. Generate a Search Result URL for the specific product on the indie site (e.g., 'https://thelittlemarket.com/search?q=ear+muffs' or 'https://www.etsy.com/search?q=chiffon+dress').
 
 SEMANTIC CART HTML:
 ${semanticHtml}
